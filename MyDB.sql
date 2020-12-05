@@ -108,3 +108,133 @@ INSERT INTO people VALUES(234567890, 'Angie Way', 'Virginia');
 INSERT INTO people VALUES(345678901, 'Maryy Tien', 'New Jersey');
 INSERT INTO people(ssn, address) VALUES(456789012, 'Michigan');
 INSERT INTO people(ssn, address) VALUES(567890123, 'California');
+
+
+
+CREATE TABLE parents
+(
+    id char(5),
+    num_of_kids number(2),
+    total_income number(5),
+    CONSTRAINT id4_fk FOREIGN KEY(id) REFERENCES workers(id),
+    CONSTRAINT check_num_of_kids CHECK(num_of_kids>=0)
+);
+?
+INSERT INTO parents VALUES(10001, 4, 17000);
+INSERT INTO parents VALUES(10002, 2, 11000);
+INSERT INTO parents VALUES(10003, 1, 9100);
+INSERT INTO parents VALUES(10004, 0, 10000);
+
+DELETE FROM parents
+where num_of_kids<2 or total_income<12000;
+
+
+SELECT *
+FROM workers
+WHERE length(name)>8
+
+SELECT *
+FROM workers
+WHERE salary = (SELECT MAX(salary) FROM workers);
+
+SELECT name, salary
+FROM workers
+WHERE salary = (SELECT MIN(salary)
+                FROM workers
+                );
+                
+                
+select name,salary from workers
+where salary = (SELECT min(salary) from workers) OR salary= (SELECT max(salary) from workers);
+
+select max(salary)
+from workers
+where salary <(Select max(salary) from workers);
+
+SELECT MAX(salary) as second_high_salary
+FROM workers
+WHERE salary <(SELECT MAX(salary)
+               FROM workers);
+               
+SELECT MIN(salary) AS second_minimum_Salary
+FROM workers
+WHERE salary > (SELECT MIN(salary) FROM workers);
+
+select * from workers
+where salary =( select max(salary)
+from workers
+where salary <(Select max(salary) from workers));
+
+SELECT MAX(salary)
+FROM workers
+WHERE salary<(SELECT salary
+FROM workers
+WHERE salary=(select MAX(salary) from workers
+WHERE salary<(SELECT MAX(salary) from workers)));
+
+select * from workers; 
+
+//subqueries
+--select * from workers
+--where salary  IN ( select salary < max(salary)
+--                       from workers  );
+                                                    
+                                                    
+CREATE TABLE customers_products
+( 
+  product_id number(10),
+  customer_name varchar2(50),
+  product_name varchar2(50)
+);
+
+INSERT INTO customers_products VALUES (10, 'Mark', 'Orange');
+INSERT INTO customers_products VALUES (10, 'Mark', 'Orange');
+INSERT INTO customers_products VALUES (20, 'John', 'Apple');
+INSERT INTO customers_products VALUES (30, 'Amy', 'Palm');
+INSERT INTO customers_products VALUES (20, 'Mark', 'Apple');
+INSERT INTO customers_products VALUES (10, 'Adem', 'Orange');
+INSERT INTO customers_products VALUES (40, 'John', 'Apricot');
+INSERT INTO customers_products VALUES (20, 'Eddie', 'Apple');
+                                                    
+                                                    
+ Select * from customers_products
+ Where product_name in ('Orange', 'Apple', 'Apricot');
+
+
+//third highest salary
+SELECT Max(salary) 
+FROM   workers 
+WHERE  salary < (SELECT Max(salary) 
+                 FROM   workers
+                 WHERE  salary NOT IN(SELECT Max(salary) 
+                                      FROM   workers)) ;
+
+//Check the product id is less than 15 or 30
+
+select * from customers_products
+where product_id<15 OR product_id>30; 
+
+
+CREATE TABLE customers_likes
+( 
+  product_id number(10),
+  customer_name varchar2(50),
+  liked_product varchar2(50)
+);
+
+
+
+INSERT INTO customers_likes VALUES (10, 'Mark', 'Orange');
+INSERT INTO customers_likes VALUES (50, 'Mark', 'Pineapple');
+INSERT INTO customers_likes VALUES (60, 'John', 'Avocado');
+INSERT INTO customers_likes VALUES (30, 'Lary', 'Cherries');
+INSERT INTO customers_likes VALUES (20, 'Mark', 'Apple');
+INSERT INTO customers_likes VALUES (10, 'Adem', 'Orange');
+INSERT INTO customers_likes VALUES (40, 'John', 'Apricot');
+INSERT INTO customers_likes VALUES (20, 'Eddie', 'Apple');      
+
+Select customer_name
+from customers_likes
+where exists(  select product_id
+               from customers_likes 
+               where customers_products.product_id=ustomers_likes product_id );
