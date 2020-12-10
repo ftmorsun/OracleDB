@@ -118,3 +118,19 @@ WHERE REGEXP_LIKE(word, '^[sya](*)');
 SELECT *
 FROM words
 WHERE REGEXP_LIKE(word, '[afm]$(*)');
+
+
+--select ends with afm  and all
+SELECT *
+FROM words
+WHERE word NOT LIKE 'at%';
+
+
+--Select the words start with 's' end with 'a'
+
+select * from words
+where REGEXP_LIKE(word, '^s*a$');
+
+select * from workers
+where salary < (select avg(salary) from workers)
+order by salary DESC;
